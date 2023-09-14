@@ -7,4 +7,6 @@ Open workstation terminal & switch to user root then run the following commands,
 # cd RH294V9K
 # sh exam-init.sh
 
+# Now open firefox and type "http://localhost/Rhce/"
+
 That's IT!
