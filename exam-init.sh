@@ -6,6 +6,7 @@ echo -ne '#####                      (33%)\r'
 
 dnf install httpd -y     > /dev/null 2>&1
 systemctl enable --now  httpd   > /dev/null 2>&1
+systemctl disable --now  firewalld   > /dev/null 2>&1
 
 echo -ne '##############             (50%)\r'
 
