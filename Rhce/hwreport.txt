@@ -3,5 +3,5 @@ HOSTNAME=inventoryhost
 MEMORY=memtotal
 BIOS=biosversion
 CPU=processor
-DISK_SIZE_VDA=disk_size_vda
-DISK_SIZE_VDB=disk_size_vdb
+DISK_SIZE_SDA=disk_size_sda
+DISK_SIZE_SDB=disk_size_sdb
