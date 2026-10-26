@@ -8,6 +8,9 @@ dnf install httpd -y     > /dev/null 2>&1
 systemctl enable --now  httpd   > /dev/null 2>&1
 systemctl disable --now  firewalld   > /dev/null 2>&1
 
+ssh student@localhost "mkdir ansible"   > /dev/null 2>&1
+ssh student@localhost "ansible-galaxy collection install http://localhost/Rhce/redhat-rhel_system_roles-1.0.0.tar.gz -p /usr/share/ansible/collections/"  > /dev/null 2>&1
+
 echo -ne '##############             (50%)\r'
 
 cp -rf Rhce  /var/www/html/Rhce     > /dev/null 2>&1
