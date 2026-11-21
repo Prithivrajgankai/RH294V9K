@@ -1,0 +1,1347 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>RHEL-10 RHCE (EX294) Exam Guide </title>
+<style>
+:root{
+  --red:#cc0000; --red2:#ee0000; --crimson:#e11d2a; --orange:#ff6b35;
+  --ink:#0f172a; --ink2:#1e293b; --slate:#334155; --muted:#64748b;
+  --line:#e2e8f0; --line2:#cbd5e1;
+  --bg:#eef2f7; --card:#ffffff; --soft:#f1f5f9;
+  --code-bg:#0f172a; --code-line:#1e293b;
+  --green:#16a34a; --green-bg:#ecfdf5; --amber:#d97706; --blue:#2563eb;
+  --shadow:0 1px 3px rgba(15,23,42,.08),0 8px 24px rgba(15,23,42,.06);
+  --shadow-lg:0 12px 40px rgba(15,23,42,.14);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'Inter','Segoe UI',system-ui,-apple-system,Roboto,sans-serif;
+  background:var(--bg);color:var(--ink);line-height:1.6;font-size:15px}
+a{color:var(--blue);text-decoration:none}
+::selection{background:var(--crimson);color:#fff}
+
+.wrap{display:flex;max-width:1440px;margin:0 auto;min-height:100vh}
+
+/* Sidebar */
+.sidebar{width:280px;flex:0 0 280px;position:sticky;top:0;height:100vh;overflow-y:auto;
+  background:linear-gradient(180deg,#0f172a,#111c33);color:#cbd5e1;padding:0 0 30px}
+.sb-brand{padding:22px 20px 18px;border-bottom:1px solid rgba(255,255,255,.08);position:sticky;top:0;
+  background:linear-gradient(180deg,#0f172a,#0f172a);z-index:2}
+.sb-brand .row{display:flex;align-items:center;gap:12px}
+.sb-brand .logo{width:44px;height:44px;border-radius:12px;background:linear-gradient(135deg,var(--crimson),var(--orange));
+  display:grid;place-items:center;font-weight:800;color:#fff;font-size:20px;box-shadow:0 6px 16px rgba(225,29,42,.4)}
+.sb-brand b{color:#fff;font-size:16px;display:block;line-height:1.2}
+.sb-brand span{font-size:11px;color:#94a3b8}
+.sb-prep{margin-top:14px;background:rgba(225,29,42,.15);border:1px solid rgba(225,29,42,.4);
+  border-radius:10px;padding:8px 12px;font-size:12px;color:#fecaca}
+.sb-prep b{color:#fff;font-size:13px}
+.sidebar h4{font-size:11px;letter-spacing:1.5px;color:#64748b;text-transform:uppercase;margin:20px 20px 8px;font-weight:700}
+.sidebar nav a{display:flex;align-items:center;gap:10px;color:#cbd5e1;padding:8px 20px;font-size:13.5px;transition:.15s;border-left:3px solid transparent}
+.sidebar nav a:hover{background:rgba(255,255,255,.05);color:#fff}
+.sidebar nav a.active{background:rgba(225,29,42,.12);border-left-color:var(--crimson);color:#fff}
+.sidebar nav a .n{flex:0 0 26px;height:26px;display:grid;place-items:center;background:rgba(255,255,255,.07);
+  border-radius:7px;font-weight:700;font-size:12px;color:#fca5a5}
+
+/* Main */
+.main{flex:1;min-width:0;padding:0 40px 90px}
+.topbar{position:sticky;top:0;z-index:5;display:flex;align-items:center;justify-content:space-between;
+  padding:14px 0;margin-bottom:8px;background:linear-gradient(180deg,var(--bg),rgba(238,242,247,.85));backdrop-filter:blur(6px)}
+.topbar .ttl{font-weight:700;font-size:15px;color:var(--slate)}
+.topbar .ttl b{color:var(--red)}
+.topbar .acts{display:flex;gap:10px}
+.btn{background:#fff;border:1px solid var(--line2);color:var(--slate);padding:8px 15px;border-radius:9px;
+  cursor:pointer;font-size:13px;font-weight:600;transition:.15s}
+.btn:hover{background:var(--ink);color:#fff;border-color:var(--ink)}
+
+/* Hero */
+.hero{position:relative;overflow:hidden;border-radius:22px;padding:40px 42px;margin:6px 0 22px;color:#fff;
+  background:linear-gradient(115deg,#7f0d15 0%,var(--crimson) 45%,var(--orange) 115%);box-shadow:var(--shadow-lg)}
+.hero::before{content:"";position:absolute;inset:0;background:
+  radial-gradient(400px 200px at 12% 10%,rgba(255,255,255,.18),transparent 60%),
+  radial-gradient(600px 300px at 100% 120%,rgba(0,0,0,.25),transparent 60%);}
+.hero > *{position:relative}
+.hero .badge{display:inline-block;background:rgba(255,255,255,.16);border:1px solid rgba(255,255,255,.35);
+  padding:5px 14px;border-radius:30px;font-size:12px;font-weight:700;letter-spacing:.6px}
+.hero .prep{position:absolute;top:0;right:0;background:rgba(0,0,0,.28);border:1px solid rgba(255,255,255,.3);
+  padding:8px 16px;border-radius:0 22px 0 16px;font-size:13px}
+.hero .prep b{font-weight:800}
+.hero h1{font-size:36px;margin:16px 0 8px;letter-spacing:-.6px;line-height:1.1}
+.hero p{max-width:640px;color:rgba(255,255,255,.92);font-size:15px}
+.hero .meta{display:flex;flex-wrap:wrap;gap:12px;margin-top:22px}
+.hero .meta div{background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.22);border-radius:12px;padding:9px 16px;font-size:12.5px}
+.hero .meta b{display:block;font-size:18px;font-weight:800;margin-top:1px}
+
+/* Panels */
+.panel{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:24px 26px;margin:16px 0;box-shadow:var(--shadow)}
+.panel h2{font-size:18px;display:flex;align-items:center;gap:11px;margin-bottom:14px;color:var(--ink)}
+.panel h2 .ic{width:32px;height:32px;border-radius:9px;display:grid;place-items:center;
+  background:linear-gradient(135deg,var(--crimson),var(--orange));color:#fff;font-size:16px}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+@media(max-width:900px){.grid2{grid-template-columns:1fr}}
+.kv{background:var(--soft);border:1px solid var(--line);border-radius:11px;padding:11px 15px;font-size:13.5px}
+.kv b{color:var(--red)}
+
+/* Setup steps (numbered flow) */
+.flow{counter-reset:fl;margin-top:6px}
+.flow .step{counter-increment:fl;position:relative;padding:0 0 4px 0;margin:0 0 4px}
+.setup-list{list-style:none;counter-reset:sc;margin:8px 0 0;padding:0}
+.setup-list li{counter-increment:sc;position:relative;padding:12px 14px 12px 52px;border:1px solid var(--line);
+  border-radius:12px;margin-bottom:10px;background:var(--soft)}
+.setup-list li::before{content:counter(sc);position:absolute;left:12px;top:11px;width:28px;height:28px;
+  border-radius:8px;background:linear-gradient(135deg,var(--crimson),var(--orange));color:#fff;
+  display:grid;place-items:center;font-weight:800;font-size:13px}
+.setup-list li .lbl{font-weight:600;display:block;margin-bottom:6px;color:var(--ink)}
+.setup-list code.inline{background:#fff;border:1px solid var(--line2)}
+
+/* Callout */
+.callout{border-radius:14px;padding:16px 20px;margin:16px 0;border:1px solid}
+.callout.red{background:#fef2f2;border-color:#fecaca}
+.callout.red h3{color:var(--red);font-size:15px;margin-bottom:6px}
+.callout.red .big{display:inline-block;background:var(--red);color:#fff;font-weight:700;padding:6px 14px;border-radius:8px;margin:6px 0}
+.callout.blue{background:#eff6ff;border-color:#bfdbfe;color:#1e40af}
+.callout.blue b{color:var(--blue)}
+
+/* Question cards */
+.q{background:var(--card);border:1px solid var(--line);border-radius:16px;margin:14px 0;overflow:hidden;
+  box-shadow:var(--shadow);transition:.15s}
+.q:hover{box-shadow:var(--shadow-lg)}
+.q-head{display:flex;align-items:center;gap:15px;padding:18px 22px;cursor:pointer;user-select:none}
+.q-head .qn{flex:0 0 48px;height:48px;border-radius:13px;background:linear-gradient(135deg,var(--crimson),var(--orange));
+  color:#fff;display:grid;place-items:center;font-weight:800;font-size:18px;box-shadow:0 6px 14px rgba(225,29,42,.32)}
+.q-head .qt{flex:1}
+.q-head .qt h3{font-size:16.5px;color:var(--ink)}
+.q-head .qt .sub{color:var(--muted);font-size:13px;margin-top:1px}
+.q-head .chev{color:var(--muted);font-size:20px;transition:transform .25s}
+.q.open .chev{transform:rotate(90deg)}
+.q-body{display:none;padding:4px 22px 22px;border-top:1px solid var(--line)}
+.q.open .q-body{display:block;animation:fade .25s ease}
+@keyframes fade{from{opacity:0;transform:translateY(-4px)}to{opacity:1}}
+
+.lab{font-size:11px;letter-spacing:1.4px;text-transform:uppercase;font-weight:800;margin:18px 0 8px}
+.lab.task{color:var(--blue)}
+.lab.ans{color:var(--green)}
+
+/* Task itemized */
+.task{background:#f8fafc;border:1px solid var(--line);border-left:4px solid var(--blue);border-radius:0 12px 12px 0;padding:14px 18px}
+.task .lead{color:var(--slate);margin-bottom:10px;font-weight:600}
+.task ol.steps{list-style:none;counter-reset:st;margin:0;padding:0}
+.task ol.steps > li{counter-increment:st;position:relative;padding:8px 0 8px 42px;border-bottom:1px dashed var(--line2)}
+.task ol.steps > li:last-child{border-bottom:none}
+.task ol.steps > li::before{content:counter(st,lower-roman);position:absolute;left:0;top:7px;width:28px;height:23px;
+  display:grid;place-items:center;background:#fff;border:1px solid var(--line2);border-radius:7px;
+  font-size:11px;font-weight:800;color:var(--blue)}
+.task ol.steps ul{list-style:disc;margin:7px 0 3px 20px;color:var(--muted)}
+.task ol.steps ul li{margin:3px 0}
+.task b{color:var(--ink)}
+
+/* Answer */
+.answer{background:var(--green-bg);border:1px solid #a7f3d0;border-left:4px solid var(--green);border-radius:0 12px 12px 0;padding:6px 16px 12px}
+.abadge{display:inline-flex;align-items:center;gap:6px;background:#fff;color:var(--green);border:1px solid #a7f3d0;
+  padding:3px 12px;border-radius:20px;font-size:11px;font-weight:800;letter-spacing:.5px;text-transform:uppercase;margin:8px 0}
+
+code.inline{background:var(--soft);border:1px solid var(--line);border-radius:5px;padding:1px 6px;
+  font-family:'Cascadia Code',Consolas,monospace;font-size:12.5px;color:var(--red)}
+
+/* Code blocks */
+.code{background:var(--code-bg);border-radius:11px;margin:10px 0;overflow:hidden;border:1px solid var(--code-line)}
+.code .bar{display:flex;align-items:center;justify-content:space-between;background:#0b1220;border-bottom:1px solid var(--code-line);padding:7px 13px}
+.code .bar .fn{font-size:11.5px;color:#fbbf24;font-family:'Cascadia Code',Consolas,monospace}
+.code .copy{background:#1e293b;border:1px solid #334155;color:#94a3b8;border-radius:6px;padding:3px 11px;font-size:11px;cursor:pointer;transition:.15s}
+.code .copy:hover{background:var(--crimson);color:#fff;border-color:var(--crimson)}
+.code pre{margin:0;padding:14px 16px;overflow-x:auto;font-family:'Cascadia Code',Consolas,'Courier New',monospace;font-size:12.8px;line-height:1.55;color:#e2e8f0}
+.cmt{color:#64748b}.cmd{color:#4ade80}.key{color:#fca5a5}.str{color:#fbbf24}.yk{color:#7dd3fc}
+
+.verify{color:var(--amber);font-weight:700;font-size:12.5px;margin:12px 0 2px}
+.gitbox{border:1.5px dashed var(--red);background:#fef2f2;border-radius:12px;padding:12px 16px;margin:16px 0 4px}
+.gitbox .lbl{color:var(--red);font-weight:800;font-size:12.5px;margin-bottom:7px;display:flex;align-items:center;gap:7px}
+
+footer{text-align:center;color:var(--muted);font-size:12.5px;padding:28px 0 6px;border-top:1px solid var(--line);margin-top:36px}
+footer b{color:var(--red)}
+@media(max-width:820px){.sidebar{display:none}.main{padding:0 16px 60px}.hero{padding:28px 22px}.hero .prep{position:static;display:inline-block;border-radius:10px;margin-bottom:10px}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<!-- Sidebar -->
+<aside class="sidebar">
+  <div class="sb-brand">
+    <div class="row">
+      <div class="logo">R</div>
+      <div><b>RHEL 10 · RHCE</b><span>EX294 Exam Guide</span></div>
+    </div>
+    <div class="sb-prep">Prepared by <b>Vectra</b></div>
+  </div>
+  <h4>Get Started</h4>
+  <nav>
+    <a href="#setup"><span class="n">▸</span> Initial Setup (Cloud Lab)</a>
+    <a href="#rules"><span class="n">i</span> Instructions &amp; Git Rule</a>
+  </nav>
+  <h4>Questions</h4>
+  <nav>
+    <a href="#q1"><span class="n">1</span> Install &amp; Configure Ansible</a>
+    <a href="#q2"><span class="n">2</span> Repositories (adhoc.yml)</a>
+    <a href="#q3"><span class="n">3</span> Install Collections</a>
+    <a href="#q4"><span class="n">4</span> Install Roles</a>
+    <a href="#q5"><span class="n">5</span> apache role</a>
+    <a href="#q6"><span class="n">6</span> roles.yml</a>
+    <a href="#q7"><span class="n">7</span> System Roles</a>
+    <a href="#q8"><span class="n">8</span> packages.yml</a>
+    <a href="#q9"><span class="n">9</span> webcontent.yml</a>
+    <a href="#q10"><span class="n">10</span> hwreport.yml</a>
+    <a href="#q11"><span class="n">11</span> issue.yml</a>
+    <a href="#q12"><span class="n">12</span> hosts.yml</a>
+    <a href="#q13"><span class="n">13</span> Ansible Vault</a>
+    <a href="#q14"><span class="n">14</span> users.yml</a>
+    <a href="#q15"><span class="n">15</span> Rekey Vault</a>
+    <a href="#q16"><span class="n">16</span> crontab.yml</a>
+    <a href="#q17"><span class="n">17</span> LVM &amp; Partition</a>
+  </nav>
+</aside>
+
+<main class="main">
+  <div class="topbar">
+    <div class="ttl">RHCE <b>EX294</b> · RHEL 10 Model Paper</div>
+    <div class="acts">
+      <button class="btn" onclick="toggleAll(true)">Expand all</button>
+      <button class="btn" onclick="toggleAll(false)">Collapse all</button>
+    </div>
+  </div>
+
+  <!-- Hero -->
+  <section class="hero">
+    <div class="prep">Prepared by <b>Vectra</b></div>
+    <span class="badge">RED HAT ENTERPRISE LINUX 10 · RHCE</span>
+    <h1>RHCE EX294 — Exam Training Guide</h1>
+    <p>Full model paper adapted for <b>RHEL&nbsp;10</b> and the cloud lab. Every question has a detailed task and a clearly marked answer. Start with the initial setup, then commit &amp; push after every question.</p>
+    <div class="meta">
+      <div>Exam<b>EX294</b></div>
+      <div>Duration<b>4 Hours</b></div>
+      <div>Total Marks<b>300</b></div>
+      <div>Platform<b>RHEL 10</b></div>
+    </div>
+  </section>
+
+  <!-- Initial Setup -->
+  <section id="setup" class="panel">
+    <h2><span class="ic">⚙️</span> Initial Setup — Cloud Lab</h2>
+    <p style="color:var(--slate);margin-bottom:4px">Open the <b>workstation</b> terminal &amp; switch to user <b>root</b>, then run the following commands step by step:</p>
+    <ol class="setup-list">
+      <li><span class="lbl">Switch to root user</span>
+        <div class="code"><div class="bar"><span class="fn">terminal</span><button class="copy" onclick="cp(this)">Copy</button></div><pre><span class="cmd">su</span> - root
+<span class="cmt"># password: redhat</span></pre></div>
+      </li>
+      <li><span class="lbl">Clone the exam repository</span>
+        <div class="code"><div class="bar"><span class="fn">terminal</span><button class="copy" onclick="cp(this)">Copy</button></div><pre><span class="cmd">git</span> clone https://github.com/Prithivrajgankai/RH294V9K.git</pre></div>
+      </li>
+      <li><span class="lbl">Enter the cloned directory</span>
+        <div class="code"><div class="bar"><span class="fn">terminal</span><button class="copy" onclick="cp(this)">Copy</button></div><pre><span class="cmd">cd</span> RH294V9K</pre></div>
+      </li>
+      <li><span class="lbl">Run the initial setup script</span>
+        <div class="code"><div class="bar"><span class="fn">terminal</span><button class="copy" onclick="cp(this)">Copy</button></div><pre><span class="cmd">sh</span> exam-init.sh</pre></div>
+      </li>
+      <li><span class="lbl">Open the exam paper in Firefox</span>
+        <div class="code"><div class="bar"><span class="fn">firefox</span><button class="copy" onclick="cp(this)">Copy</button></div><pre>http://localhost/Rhce/</pre></div>
+      </li>
+    </ol>
+    <div class="callout blue" style="margin-top:16px">
+      <b>Note:</b> After completing <b>each question</b>, you must <b>commit and push it to git</b> — <code class="inline">git add .</code> → <code class="inline">git commit -m "..."</code> → <code class="inline">git push</code>.
+    </div>
+  </section>
+
+  <!-- Instructions & Git Rule -->
+  <section id="rules" class="panel">
+    <h2><span class="ic">📋</span> Exam Instructions</h2>
+    <div class="grid2">
+      <div class="kv"><b>Control node:</b> workstation.lab.example.com</div>
+      <div class="kv"><b>Managed nodes:</b> servera / serverb / serverc / serverd</div>
+      <div class="kv"><b>Root password:</b> redhat (all nodes)</div>
+      <div class="kv"><b>Control user:</b> student / student</div>
+      <div class="kv"><b>Managed node user:</b> devops</div>
+      <div class="kv"><b>AAP:</b> utility.lab.example.com · admin / redhat</div>
+    </div>
+    <div class="callout red" style="margin-top:16px">
+      <h3>⚠️ Git push is mandatory</h3>
+      <div class="big">No commit &amp; push = 0 marks for that question.</div>
+      <p style="color:var(--slate);margin-top:6px">After every question, from inside your cloned git repository run:</p>
+      <div class="code"><div class="bar"><span class="fn">after every question</span><button class="copy" onclick="cp(this)">Copy</button></div><pre><span class="cmd">git</span> add .
+<span class="cmd">git</span> commit -m <span class="str">"&lt;changes done in this question&gt;"</span>
+<span class="cmd">git</span> push</pre></div>
+    </div>
+    <div class="callout blue"><b>Runner note:</b> If <code class="inline">ansible-navigator</code> does not work, use <code class="inline">ansible-playbook</code> instead — both are shown in every question.</div>
+  </section>
+
+  <!-- Q1 -->
+  <article id="q1" class="q open">
+    <div class="q-head" onclick="tg(this)">
+      <div class="qn">1</div>
+      <div class="qt"><h3>Configure Ansible on the control node</h3><div class="sub">Packages, static inventory, ansible.cfg</div></div>
+      <div class="chev">▸</div>
+    </div>
+    <div class="q-body">
+      <div class="lab task">Task</div>
+      <div class="task">
+        <div class="lead">Configure Ansible on the control node as follows:</div>
+        <ol class="steps">
+          <li>Create a static inventory file called <code class="inline">/home/student/ansible/inventory</code> as follows:
+            <ul>
+              <li><code class="inline">servera.lab.example.com</code> is a member of the <b>dev</b> host group</li>
+              <li><code class="inline">serverb.lab.example.com</code> is a member of the <b>test</b> host group</li>
+              <li><code class="inline">serverc.lab.example.com</code> is a member of the <b>prod</b> host group</li>
+              <li><code class="inline">serverd.lab.example.com</code> is a member of the <b>balancers</b> host group</li>
+              <li>The <b>prod</b> group is a member of the <b>webservers</b> host group</li>
+            </ul>
+          </li>
+          <li>Create a configuration file called <code class="inline">ansible.cfg</code> as follows:
+            <ul>
+              <li>The host inventory file <code class="inline">/home/student/ansible/inventory</code> is defined</li>
+              <li>The location of roles is defined as <code class="inline">/home/student/ansible/roles</code></li>
+              <li>The location of collections is defined as <code class="inline">/home/student/ansible/collections</code></li>
+            </ul>
+          </li>
+        </ol>
+      </div>
+      <div class="lab ans">Answer</div>
+      <div class="answer"><span class="abadge">✓ Solution</span>
+        <div class="code"><div class="bar"><span class="fn">setup commands</span><button class="copy" onclick="cp(this)">Copy</button></div><pre><span class="cmd">ssh</span> student@workstation 
+
+<span class="cmd">vim</span> ~/.vimrc
+set ai ts=2 et cursorcolumn
+<span class="cmd">source</span> ~/.vimrc
+
+<span class="cmd">cd</span> /home/student/ansible</pre></div>
+        <div class="code"><div class="bar"><span class="fn">/home/student/ansible/inventory</span><button class="copy" onclick="cp(this)">Copy</button></div><pre><span class="key">[dev]</span>
+servera.lab.example.com
+<span class="key">[test]</span>
+serverb.lab.example.com
+<span class="key">[prod]</span>
+serverc.lab.example.com
+<span class="key">[balancers]</span>
+serverd.lab.example.com
+<span class="key">[webservers:children]</span>
+prod</pre></div>
+        <div class="code"><div class="bar"><span class="fn">/home/student/ansible/ansible.cfg</span><button class="copy" onclick="cp(this)">Copy</button></div><pre><span class="key">[defaults]</span>
+remote_user=devops
+inventory=/home/student/ansible/inventory
+roles_path=/home/student/ansible/roles
+collections_path=/home/student/ansible/collections
+
+<span class="key">[privilege_escalation]</span>
+become=true</pre></div>
+      </div>
+      <div class="verify">Verify:</div>
+      <div class="code"><div class="bar"><span class="fn">verify</span><button class="copy" onclick="cp(this)">Copy</button></div><pre><span class="cmd">ansible</span> all -m command -a <span class="str">'id'</span>   <span class="cmt"># should return the root user</span></pre></div>
+      <div class="gitbox"><div class="lbl">🔺 Commit &amp; push to git</div>
+        <div class="code"><div class="bar"><span class="fn">git</span><button class="copy" onclick="cp(this)">Copy</button></div><pre><span class="cmt"># from inside your cloned git repository</span>
+<span class="cmd">git</span> add inventory ansible.cfg
+<span class="cmd">git</span> commit -m <span class="str">"Q1: ansible install, inventory and ansible.cfg"</span>
+<span class="cmd">git</span> push</pre></div></div>
+    </div>
+  </article>
+
+  <!-- Q2 -->
+  <article id="q2" class="q">
+    <div class="q-head" onclick="tg(this)">
+      <div class="qn">2</div>
+      <div class="qt"><h3>Configure repositories on all nodes — adhoc.yml</h3><div class="sub">baseos + appstream via yum_repository</div></div>
+      <div class="chev">▸</div>
+    </div>
+    <div class="q-body">
+      <div class="lab task">Task</div>
+      <div class="task">
+        <div class="lead">Create a playbook <code class="inline">adhoc.yml</code> for configuring the repository on all nodes.</div>
+        <ol class="steps">
+          <li>Repository <b>baseos</b>:
+            <ul>
+              <li>Name = <code class="inline">baseos</code></li>
+              <li>Description = <code class="inline">Baseos Description</code></li>
+              <li>URL = <code class="inline">http://content/rhel10.0/x86_64/dvd/BaseOS</code></li>
+              <li>GPG is enabled; Gpgkey = <code class="inline">http://content/rhel10.0/x86_64/dvd/RPM-GPG-KEY-redhat-release</code></li>
+              <li>Repository is enabled.</li>
+            </ul>
+          </li>
+          <li>Repository <b>appstream</b>:
+            <ul>
+              <li>Name = <code class="inline">appstream</code></li>
+              <li>Description = <code class="inline">App Description</code></li>
+              <li>URL = <code class="inline">http://content/rhel10.0/x86_64/dvd/AppStream</code></li>
+              <li>GPG is enabled; Gpgkey = <code class="inline">http://content/rhel10.0/x86_64/dvd/RPM-GPG-KEY-redhat-release</code></li>
+              <li>Repository is enabled.</li>
+            </ul>
+          </li>
+        </ol>
+      </div>
+      <div class="lab ans">Answer</div>
+      <div class="answer"><span class="abadge">✓ Solution</span>
+        <div class="code"><div class="bar"><span class="fn">/home/student/ansible/adhoc.yml</span><button class="copy" onclick="cp(this)">Copy</button></div><pre><span class="cmt">---</span>
+- <span class="yk">name</span>: Creating yum repository
+  <span class="yk">hosts</span>: all
+  <span class="yk">tasks</span>:
+    - <span class="yk">name</span>: Create BaseOS Repository
+      <span class="yk">ansible.builtin.yum_repository</span>:
+        <span class="yk">name</span>: <span class="str">"baseos"</span>
+        <span class="yk">description</span>: <span class="str">"Baseos Description"</span>
+        <span class="yk">baseurl</span>: http://content/rhel10.0/x86_64/dvd/BaseOS
+        <span class="yk">gpgcheck</span>: yes
+        <span class="yk">gpgkey</span>: http://content/rhel10.0/x86_64/dvd/RPM-GPG-KEY-redhat-release
+        <span class="yk">enabled</span>: yes
+    - <span class="yk">name</span>: Create Appstream Repository
+      <span class="yk">ansible.builtin.yum_repository</span>:
+        <span class="yk">name</span>: <span class="str">"appstream"</span>
+        <span class="yk">description</span>: <span class="str">"App Description"</span>
+        <span class="yk">baseurl</span>: http://content/rhel10.0/x86_64/dvd/AppStream
+        <span class="yk">gpgcheck</span>: yes
+        <span class="yk">gpgkey</span>: http://content/rhel10.0/x86_64/dvd/RPM-GPG-KEY-redhat-release
+        <span class="yk">enabled</span>: yes</pre></div>
+      </div>
+      <div class="verify">Run &amp; Verify:</div>
+      <div class="code"><div class="bar"><span class="fn">run</span><button class="copy" onclick="cp(this)">Copy</button></div><pre><span class="cmd">ansible-navigator</span> run adhoc.yml -m stdout    <span class="cmt"># or: ansible-playbook adhoc.yml</span>
+<span class="cmd">ansible</span> all -m command -a <span class="str">'dnf repolist all'</span></pre></div>
+      <div class="gitbox"><div class="lbl">🔺 Commit &amp; push to git</div>
+        <div class="code"><div class="bar"><span class="fn">git</span><button class="copy" onclick="cp(this)">Copy</button></div><pre><span class="cmd">git</span> add adhoc.yml
+<span class="cmd">git</span> commit -m <span class="str">"Q2: adhoc.yml baseos and appstream repos"</span>
+<span class="cmd">git</span> push</pre></div></div>
+    </div>
+  </article>
+
+  <!-- Q3 -->
+  <article id="q3" class="q">
+    <div class="q-head" onclick="tg(this)">
+      <div class="qn">3</div>
+      <div class="qt"><h3>Install collections</h3><div class="sub">ansible-posix, community-general, system_roles</div></div>
+      <div class="chev">▸</div>
+    </div>
+    <div class="q-body">
+      <div class="lab task">Task</div>
+      <div class="task">
+        <div class="lead">Install the collections.</div>
+        <ol class="steps">
+          <li>Create a directory <code class="inline">collections</code> under <code class="inline">/home/student/ansible</code>.</li>
+          <li>Use the given URL <code class="inline">http://localhost/Rhce/</code> to install your collections.</li>
+          <li>Install these collections:
+            <ul>
+              <li><code class="inline">ansible-posix-1.4.0.tar.gz</code></li>
+              <li><code class="inline">community-general-7.3.0.tar.gz</code></li>
+            </ul>
+          </li>
+        </ol>
+      </div>
+      <div class="lab ans">Answer</div>
+      <div class="answer"><span class="abadge">✓ Solution</span>
+        <div class="code"><div class="bar"><span class="fn">install collections</span><button class="copy" onclick="cp(this)">Copy</button></div><pre><span class="cmd">mkdir</span> /home/student/ansible/collections
+<span class="cmd">cd</span> /home/student/ansible
+
+<span class="cmd">ansible-galaxy</span> collection install http://localhost/Rhce/ansible-posix-1.4.0.tar.gz -p collections
+<span class="cmd">ansible-galaxy</span> collection install http://localhost/Rhce/community-general-7.3.0.tar.gz -p collections</pre></div>
+      </div>
+      <div class="verify">Verify:</div>
+      <div class="code"><div class="bar"><span class="fn">verify</span><button class="copy" onclick="cp(this)">Copy</button></div><pre><span class="cmd">ls</span> collections/ansible_collections
+<span class="cmd">ansible-galaxy</span> collection list</pre></div>
+    </div>
+  </article>
+
+  <!-- Q4 -->
+  <article id="q4" class="q">
+    <div class="q-head" onclick="tg(this)">
+      <div class="qn">4</div>
+      <div class="qt"><h3>Install roles via requirements.yml</h3><div class="sub">balancer + phpinfo from galaxy</div></div>
+      <div class="chev">▸</div>
+    </div>
+    <div class="q-body">
+      <div class="lab task">Task</div>
+      <div class="task">
+        <div class="lead">Install the roles.</div>
+        <ol class="steps">
+          <li>Create a directory <code class="inline">roles</code> under <code class="inline">/home/student/ansible</code>.</li>
+          <li>Create a playbook named <code class="inline">requirements.yml</code> under the <code class="inline">roles</code> directory and download the online roles using the galaxy command.</li>
+          <li>Role name <b>balancer</b> — download from <code class="inline">http://localhost/Rhce/balancer.tar.gz</code></li>
+          <li>Role name <b>phpinfo</b> — download from <code class="inline">http://localhost/Rhce/phpinfo.tar.gz</code></li>
+        </ol>
+      </div>
+      <div class="lab ans">Answer</div>
+      <div class="answer"><span class="abadge">✓ Solution</span>
+        <div class="code"><div class="bar"><span class="fn">/home/student/ansible/roles/requirements.yml</span><button class="copy" onclick="cp(this)">Copy</button></div><pre><span class="cmt">---</span>
+- <span class="yk">src</span>: http://localhost/Rhce/balancer.tar.gz
+  <span class="yk">name</span>: balancer
+- <span class="yk">src</span>: http://localhost/Rhce/phpinfo.tar.gz
+  <span class="yk">name</span>: phpinfo</pre></div>
+        <div class="code"><div class="bar"><span class="fn">create dir &amp; install</span><button class="copy" onclick="cp(this)">Copy</button></div><pre><span class="cmd">mkdir</span> /home/student/ansible/roles
+<span class="cmd">ansible-galaxy</span> role install -r /home/student/ansible/roles/requirements.yml -p roles</pre></div>
+      </div>
+      <div class="gitbox"><div class="lbl">🔺 Commit &amp; push to git</div>
+        <div class="code"><div class="bar"><span class="fn">git</span><button class="copy" onclick="cp(this)">Copy</button></div><pre><span class="cmd">git</span> add roles/requirements.yml
+<span class="cmd">git</span> commit -m <span class="str">"Q4: requirements.yml balancer and phpinfo roles"</span>
+<span class="cmd">git</span> push</pre></div></div>
+    </div>
+  </article>
+
+  <!-- Q5 -->
+  <article id="q5" class="q">
+    <div class="q-head" onclick="tg(this)">
+      <div class="qn">5</div>
+      <div class="qt"><h3>Create an offline role named apache</h3><div class="sub">httpd + firewall + templated index.html</div></div>
+      <div class="chev">▸</div>
+    </div>
+    <div class="q-body">
+      <div class="lab task">Task</div>
+      <div class="task">
+        <div class="lead">Create an offline role named <b>apache</b> under the <code class="inline">roles</code> directory.</div>
+        <ol class="steps">
+          <li>Install the <code class="inline">httpd</code> package; the service should be started and enabled.</li>
+          <li>Host the web page using <code class="inline">template.j2</code>.</li>
+          <li>The <code class="inline">template.j2</code> should contain: <code class="inline">My host is HOSTNAME on IPADDRESS</code>
+            <ul><li>Where <b>HOSTNAME</b> is the fully qualified domain name.</li></ul>
+          </li>
+          <li>Create a playbook named <code class="inline">apache_role.yml</code> and run the role on the <b>dev</b> group.</li>
+        </ol>
+      </div>
+      <div class="lab ans">Answer</div>
+      <div class="answer"><span class="abadge">✓ Solution</span>
+        <div class="code"><div class="bar"><span class="fn">init role</span><button class="copy" onclick="cp(this)">Copy</button></div><pre><span class="cmd">ansible-galaxy</span> role init /home/student/ansible/roles/apache</pre></div>
+        <div class="code"><div class="bar"><span class="fn">roles/apache/templates/template.j2</span><button class="copy" onclick="cp(this)">Copy</button></div><pre>My host is {{ ansible_fqdn }} on {{ ansible_default_ipv4.address }}
+<span class="cmt"># or</span>
+My host is {{ ansible_facts['fqdn'] }} on {{ ansible_facts['default_ipv4']['address'] }}</pre></div>
+        <div class="code"><div class="bar"><span class="fn">roles/apache/tasks/main.yml</span><button class="copy" onclick="cp(this)">Copy</button></div><pre>- <span class="yk">name</span>: Install httpd package
+  <span class="yk">ansible.builtin.dnf</span>:
+    <span class="yk">name</span>:
+      - httpd
+      - firewalld
+    <span class="yk">state</span>: present
+- <span class="yk">name</span>: start service httpd
+  <span class="yk">ansible.builtin.service</span>:
+    <span class="yk">name</span>: httpd
+    <span class="yk">state</span>: started
+    <span class="yk">enabled</span>: yes
+- <span class="yk">name</span>: start service firewalld
+  <span class="yk">ansible.builtin.service</span>:
+    <span class="yk">name</span>: firewalld
+    <span class="yk">state</span>: started
+    <span class="yk">enabled</span>: yes
+- <span class="yk">name</span>: Add http service in firewall rule
+  <span class="yk">ansible.posix.firewalld</span>:
+    <span class="yk">service</span>: http
+    <span class="yk">state</span>: enabled
+    <span class="yk">permanent</span>: yes
+    <span class="yk">immediate</span>: yes
+- <span class="yk">name</span>: Copy the template.j2 file to web server directory
+  <span class="yk">ansible.builtin.template</span>:
+    <span class="yk">src</span>: template.j2
+    <span class="yk">dest</span>: /var/www/html/index.html</pre></div>
+        <div class="code"><div class="bar"><span class="fn">/home/student/ansible/apache_role.yml</span><button class="copy" onclick="cp(this)">Copy</button></div><pre><span class="cmt">---</span>
+- <span class="yk">name</span>: apache deploy
+  <span class="yk">hosts</span>: dev
+  <span class="yk">roles</span>:
+    - apache</pre></div>
+      </div>
+      <div class="verify">Run &amp; Verify:</div>
+      <div class="code"><div class="bar"><span class="fn">run</span><button class="copy" onclick="cp(this)">Copy</button></div><pre><span class="cmd">ansible-navigator</span> run apache_role.yml -m stdout   <span class="cmt"># or: ansible-playbook apache_role.yml</span>
+<span class="cmd">curl</span> http://servera.lab.example.com</pre></div>
+      <div class="gitbox"><div class="lbl">🔺 Commit &amp; push to git</div>
+        <div class="code"><div class="bar"><span class="fn">git</span><button class="copy" onclick="cp(this)">Copy</button></div><pre><span class="cmd">git</span> add roles/apache apache_role.yml
+<span class="cmd">git</span> commit -m <span class="str">"Q5: apache role and apache_role.yml"</span>
+<span class="cmd">git</span> push</pre></div></div>
+    </div>
+  </article>
+
+  <!-- Q6 -->
+  <article id="q6" class="q">
+    <div class="q-head" onclick="tg(this)">
+      <div class="qn">6</div>
+      <div class="qt"><h3>Use the roles — roles.yml</h3><div class="sub">phpinfo on webservers, balancer on balancers</div></div>
+      <div class="chev">▸</div>
+    </div>
+    <div class="q-body">
+      <div class="lab task">Task</div>
+      <div class="task">
+        <div class="lead">Create a playbook <code class="inline">roles.yml</code> for using the roles.</div>
+        <ol class="steps">
+          <li>The playbook contains the <b>balancers</b> host group to use the <b>balancer</b> role:
+            <ul>
+              <li>Browsing <code class="inline">http://serverd.lab.example.com</code> produces: <i>"Welcome to servera.lab.example.com, (version 1.0)"</i></li>
+              <li>Refreshing the same URL should change the output to: <i>"Welcome to serverc.lab.example.com, (version 1.0)"</i></li>
+            </ul>
+          </li>
+          <li>The playbook contains the <b>webservers</b> host group to use the <b>phpinfo</b> role:
+            <ul>
+              <li>Browsing the webserver produces output with various PHP contents, e.g. <code class="inline">http://serverc.lab.example.com</code> → <i>"Welcome to serverc.lab.example.com, (version 1.0)"</i></li>
+              <li>Similarly <code class="inline">http://servera.lab.example.com</code> → <i>"My host is servera.lab.example.com on 172.25.250.10"</i></li>
+            </ul>
+          </li>
+          <li><b>Note:</b> Do not change the roles order (phpinfo first, then balancer).</li>
+        </ol>
+      </div>
+      <div class="lab ans">Answer</div>
+      <div class="answer"><span class="abadge">✓ Solution</span>
+        <div class="code"><div class="bar"><span class="fn">/home/student/ansible/roles.yml</span><button class="copy" onclick="cp(this)">Copy</button></div><pre><span class="cmt">---</span>
+- <span class="yk">name</span>: Run the phpinfo first
+  <span class="yk">hosts</span>: webservers
+  <span class="yk">roles</span>:
+    - phpinfo
+
+- <span class="yk">name</span>: Run the balancer
+  <span class="yk">hosts</span>: balancers
+  <span class="yk">roles</span>:
+    - balancer</pre></div>
+      </div>
+      <div class="verify">Run &amp; Verify:</div>
+      <div class="code"><div class="bar"><span class="fn">run</span><button class="copy" onclick="cp(this)">Copy</button></div><pre><span class="cmd">ansible-navigator</span> run roles.yml -m stdout    <span class="cmt"># or: ansible-playbook roles.yml</span>
+<span class="cmt"># open in browser: http://serverd... / http://serverc... / http://servera...</span></pre></div>
+      <div class="gitbox"><div class="lbl">🔺 Commit &amp; push to git</div>
+        <div class="code"><div class="bar"><span class="fn">git</span><button class="copy" onclick="cp(this)">Copy</button></div><pre><span class="cmd">git</span> add roles.yml
+<span class="cmd">git</span> commit -m <span class="str">"Q6: roles.yml phpinfo and balancer"</span>
+<span class="cmd">git</span> push</pre></div></div>
+    </div>
+  </article>
+
+  <!-- Q7 -->
+  <article id="q7" class="q">
+    <div class="q-head" onclick="tg(this)">
+      <div class="qn">7</div>
+      <div class="qt"><h3>System Roles — timesync.yml &amp; selinux.yml</h3><div class="sub">configure collection paths and use fully qualified system roles</div></div>
+      <div class="chev">▸</div>
+    </div>
+    <div class="q-body">
+
+      <div class="lab task">Task 7.1 — timesync.yml</div>
+      <div class="task">
+        <div class="lead">Create a playbook named <code class="inline">timesync.yml</code> and use the system roles.</div>
+        <ol class="steps">
+          <li>Use NTP server <code class="inline">172.25.254.254</code> and enable <b>iburst</b>.</li>
+          <li>Run this playbook on all the managed nodes.</li>
+        </ol>
+      </div>
+      <div class="answer"><span class="abadge">✓ Solution 7.1</span>
+        <div class="code"><div class="bar"><span class="fn">/home/student/ansible/ansible.cfg</span><button class="copy" onclick="cp(this)">Copy</button></div><pre><span class="key">[defaults]</span>
+remote_user=devops
+inventory=/home/student/ansible/inventory
+roles_path=/home/student/ansible/roles
+collections_paths=/home/student/ansible/collections:/usr/share/ansible/collections/
+<span class="key">[privilege_escalation]</span>
+become=true
+
+<span class="cmd">ansible-galaxy</span> collection list  <span class="cmt"># verify</span></pre></div>
+        <div class="code"><div class="bar"><span class="fn">/home/student/ansible/timesync.yml</span><button class="copy" onclick="cp(this)">Copy</button></div><pre><span class="cmt">---</span>
+- <span class="yk">name</span>: Using the timesync roles
+  <span class="yk">hosts</span>: all
+  <span class="yk">vars</span>:
+    <span class="yk">timesync_ntp_servers</span>:
+      - <span class="yk">hostname</span>: 172.25.254.254
+        <span class="yk">iburst</span>: yes
+  <span class="yk">roles</span>:
+    - redhat.rhel_system_roles.timesync</pre></div>
+        <div class="code"><div class="bar"><span class="fn">run &amp; verify</span><button class="copy" onclick="cp(this)">Copy</button></div><pre><span class="cmd">ansible-navigator</span> run timesync.yml -m stdout    <span class="cmt"># or: ansible-playbook timesync.yml</span>
+<span class="cmd">ansible</span> dev -m command -a <span class="str">'cat /etc/chrony.conf'</span></pre></div>
+      </div>
+
+      <div class="gitbox"><div class="lbl">🔺 Commit &amp; push to git — 7.1</div>
+        <div class="code"><div class="bar"><span class="fn">git</span><button class="copy" onclick="cp(this)">Copy</button></div><pre><span class="cmd">git</span> add timesync.yml ansible.cfg
+<span class="cmd">git</span> commit -m <span class="str">"Q7.1: timesync system role"</span>
+<span class="cmd">git</span> push</pre></div></div>
+
+      <div class="lab task">Task 7.2 — selinux.yml</div>
+      <div class="task">
+        <div class="lead">Create a playbook named <code class="inline">selinux.yml</code> and use the system roles.</div>
+        <ol class="steps">
+          <li>Set the SELinux mode as <b>enforcing</b> on all managed nodes.</li>
+          <li>Set the SELinux policy as <b>targeted</b> on all managed nodes.</li>
+        </ol>
+      </div>
+      <div class="answer"><span class="abadge">✓ Solution 7.2</span>
+        <div class="code"><div class="bar"><span class="fn">/home/student/ansible/ansible.cfg</span><button class="copy" onclick="cp(this)">Copy</button></div><pre><span class="key">[defaults]</span>
+remote_user=devops
+inventory=/home/student/ansible/inventory
+roles_path=/home/student/ansible/roles
+collections_paths=/home/student/ansible/collections:/usr/share/ansible/collections/
+<span class="key">[privilege_escalation]</span>
+become=true
+
+<span class="cmd">ansible-galaxy</span> collection list  <span class="cmt"># verify</span></pre></div>
+        <div class="code"><div class="bar"><span class="fn">/home/student/ansible/selinux.yml</span><button class="copy" onclick="cp(this)">Copy</button></div><pre><span class="cmt">---</span>
+- <span class="yk">name</span>: Configure selinux as enforcing mode
+  <span class="yk">hosts</span>: all
+  <span class="yk">vars</span>:
+    - <span class="yk">selinux_state</span>: enforcing
+    - <span class="yk">selinux_policy</span>: targeted
+  <span class="yk">roles</span>:
+    - redhat.rhel_system_roles.selinux</pre></div>
+        <div class="code"><div class="bar"><span class="fn">run &amp; verify</span><button class="copy" onclick="cp(this)">Copy</button></div><pre><span class="cmd">ansible-navigator</span> run selinux.yml -m stdout    <span class="cmt"># or: ansible-playbook selinux.yml</span>
+<span class="cmd">ansible</span> all -m command -a <span class="str">"cat /etc/selinux/config"</span></pre></div>
+      </div>
+      <div class="gitbox"><div class="lbl">🔺 Commit &amp; push to git</div>
+        <div class="code"><div class="bar"><span class="fn">git</span><button class="copy" onclick="cp(this)">Copy</button></div><pre><span class="cmd">git</span> add selinux.yml ansible.cfg
+<span class="cmd">git</span> commit -m <span class="str">"Q7: system roles install + timesync.yml + selinux.yml"</span>
+<span class="cmd">git</span> push</pre></div></div>
+    </div>
+  </article>
+
+  <!-- Q8 -->
+  <article id="q8" class="q">
+    <div class="q-head" onclick="tg(this)">
+      <div class="qn">8</div>
+      <div class="qt"><h3>Install packages across groups — packages.yml</h3><div class="sub">separate play per task</div></div>
+      <div class="chev">▸</div>
+    </div>
+    <div class="q-body">
+      <div class="lab task">Task</div>
+      <div class="task">
+        <div class="lead">Install packages in multiple groups. Playbook name <code class="inline">packages.yml</code>.</div>
+        <ol class="steps">
+          <li>Install <b>vsftpd</b> and <b>mariadb-server</b> packages in the <b>dev</b> and <b>test</b> groups.</li>
+          <li>Install the <b>"RPM Development Tools"</b> group package in the <b>prod</b> group.</li>
+          <li>Update all packages in the <b>dev</b> group.</li>
+          <li>Use a separate play for each task.</li>
+        </ol>
+      </div>
+      <div class="lab ans">Answer</div>
+      <div class="answer"><span class="abadge">✓ Solution</span>
+        <div class="code"><div class="bar"><span class="fn">/home/student/ansible/packages.yml</span><button class="copy" onclick="cp(this)">Copy</button></div><pre><span class="cmt">---</span>
+- <span class="yk">name</span>: Package installation
+  <span class="yk">hosts</span>: dev,test
+  <span class="yk">tasks</span>:
+    - <span class="yk">name</span>: installing vsftpd and mariadb-server
+      <span class="yk">ansible.builtin.dnf</span>:
+        <span class="yk">name</span>:
+          - vsftpd
+          - mariadb-server
+        <span class="yk">state</span>: present
+
+- <span class="yk">name</span>: group package installation
+  <span class="yk">hosts</span>: prod
+  <span class="yk">tasks</span>:
+    - <span class="yk">name</span>: installing group package 'Development tools'
+      <span class="yk">ansible.builtin.dnf</span>:
+        <span class="yk">name</span>: <span class="str">'@RPM Development Tools'</span>
+        <span class="yk">state</span>: present
+
+- <span class="yk">name</span>: update packages
+  <span class="yk">hosts</span>: dev
+  <span class="yk">tasks</span>:
+    - <span class="yk">name</span>: updating all
+      <span class="yk">ansible.builtin.dnf</span>:
+        <span class="yk">name</span>: <span class="str">'*'</span>
+        <span class="yk">state</span>: latest</pre></div>
+      </div>
+      <div class="verify">Run &amp; Verify:</div>
+      <div class="code"><div class="bar"><span class="fn">run</span><button class="copy" onclick="cp(this)">Copy</button></div><pre><span class="cmd">ansible-navigator</span> run packages.yml -m stdout   <span class="cmt"># or: ansible-playbook packages.yml</span>
+<span class="cmd">ansible</span> dev -m command -a <span class="str">'dnf list installed | grep vsftpd'</span>
+<span class="cmd">ansible</span> prod -m command -a <span class="str">'dnf group list'</span></pre></div>
+      <div class="gitbox"><div class="lbl">🔺 Commit &amp; push to git</div>
+        <div class="code"><div class="bar"><span class="fn">git</span><button class="copy" onclick="cp(this)">Copy</button></div><pre><span class="cmd">git</span> add packages.yml
+<span class="cmd">git</span> commit -m <span class="str">"Q8: packages.yml"</span>
+<span class="cmd">git</span> push</pre></div></div>
+    </div>
+  </article>
+
+  <!-- Q9 -->
+  <article id="q9" class="q">
+    <div class="q-head" onclick="tg(this)">
+      <div class="qn">9</div>
+      <div class="qt"><h3>Web content &amp; permissions — webcontent.yml</h3><div class="sub">/devweb dir, SELinux context, symlink</div></div>
+      <div class="chev">▸</div>
+    </div>
+    <div class="q-body">
+      <div class="lab task">Task</div>
+      <div class="task">
+        <div class="lead">Create a playbook <code class="inline">webcontent.yml</code> and run it on the <b>dev</b> group.</div>
+        <ol class="steps">
+          <li>Create a directory <code class="inline">/devweb</code> owned by the <b>devops</b> group.</li>
+          <li><code class="inline">/devweb</code> should have context type <b>httpd</b> (<code class="inline">httpd_sys_content_t</code>).</li>
+          <li>Permissions: user=rwx, group=rwx, others=rx, and the group special (setgid) permission should be applied to <code class="inline">/devweb</code>.</li>
+          <li>Create <code class="inline">/devweb/index.html</code> with content <code class="inline">Development</code>.</li>
+          <li>Link the <code class="inline">/devweb</code> directory to <code class="inline">/var/www/html/devweb</code>.</li>
+        </ol>
+      </div>
+      <div class="lab ans">Answer</div>
+      <div class="answer"><span class="abadge">✓ Solution</span>
+        <div class="code"><div class="bar"><span class="fn">/home/student/ansible/webcontent.yml</span><button class="copy" onclick="cp(this)">Copy</button></div><pre><span class="cmt">---</span>
+- <span class="yk">name</span>: create a link
+  <span class="yk">hosts</span>: dev
+  <span class="yk">tasks</span>:
+    - <span class="yk">name</span>: create a directory
+      <span class="yk">ansible.builtin.file</span>:
+        <span class="yk">path</span>: /devweb
+        <span class="yk">state</span>: directory
+        <span class="yk">group</span>: devops
+        <span class="yk">mode</span>: <span class="str">'02775'</span>
+        <span class="yk">setype</span>: httpd_sys_content_t
+    - <span class="yk">name</span>: create a file
+      <span class="yk">ansible.builtin.file</span>:
+        <span class="yk">path</span>: /devweb/index.html
+        <span class="yk">state</span>: touch
+    - <span class="yk">name</span>: copy the contents to index.html
+      <span class="yk">ansible.builtin.copy</span>:
+        <span class="yk">content</span>: <span class="str">"Development\n"</span>
+        <span class="yk">dest</span>: /devweb/index.html
+    - <span class="yk">name</span>: link the directory
+      <span class="yk">ansible.builtin.file</span>:
+        <span class="yk">src</span>: /devweb
+        <span class="yk">dest</span>: /var/www/html/devweb
+        <span class="yk">state</span>: link</pre></div>
+      </div>
+      <div class="verify">Run &amp; Verify:</div>
+      <div class="code"><div class="bar"><span class="fn">run</span><button class="copy" onclick="cp(this)">Copy</button></div><pre><span class="cmd">ansible-navigator</span> run webcontent.yml -m stdout   <span class="cmt"># or: ansible-playbook webcontent.yml</span>
+<span class="cmd">curl</span> http://servera.lab.example.com/devweb/</pre></div>
+      <div class="gitbox"><div class="lbl">🔺 Commit &amp; push to git</div>
+        <div class="code"><div class="bar"><span class="fn">git</span><button class="copy" onclick="cp(this)">Copy</button></div><pre><span class="cmd">git</span> add webcontent.yml
+<span class="cmd">git</span> commit -m <span class="str">"Q9: webcontent.yml"</span>
+<span class="cmd">git</span> push</pre></div></div>
+    </div>
+  </article>
+
+  <!-- Q10 -->
+  <article id="q10" class="q">
+    <div class="q-head" onclick="tg(this)">
+      <div class="qn">10</div>
+      <div class="qt"><h3>Hardware report — hwreport.yml</h3><div class="sub">gather facts, default NONE</div></div>
+      <div class="chev">▸</div>
+    </div>
+    <div class="q-body">
+      <div class="lab task">Task</div>
+      <div class="task">
+        <div class="lead">Collect a hardware report using a playbook on all nodes. Playbook name <code class="inline">hwreport.yml</code>.</div>
+        <ol class="steps">
+          <li>Download <code class="inline">hwreport.txt</code> from <code class="inline">http://workstation/Rhce/hwreport.txt</code> and save it under <code class="inline">/root</code>.</li>
+          <li>If there is no information, it must show <b>NONE</b>.</li>
+          <li>Collect: HOSTNAME, MEMORY, BIOS, CPU, DISK_SIZE_SDA, DISK_SIZE_SDB.</li>
+        </ol>
+      </div>
+      <div class="lab ans">Answer</div>
+      <div class="answer"><span class="abadge">✓ Solution</span>
+        <div class="code"><div class="bar"><span class="fn">/home/student/ansible/hwreport.yml</span><button class="copy" onclick="cp(this)">Copy</button></div><pre><span class="cmt">---</span>
+- <span class="yk">name</span>: hwreport
+  <span class="yk">hosts</span>: all
+  <span class="yk">ignore_errors</span>: yes
+  <span class="yk">tasks</span>:
+    - <span class="yk">name</span>: Download the file
+      <span class="yk">ansible.builtin.get_url</span>:
+        <span class="yk">url</span>: <span class="str">"http://workstation/Rhce/hwreport.txt"</span>
+        <span class="yk">dest</span>: /root/hwreport.txt
+    - <span class="yk">name</span>: Collect report 1
+      <span class="yk">ansible.builtin.set_fact</span>:
+        <span class="yk">HOSTNAME</span>: <span class="str">"{{ ansible_hostname }}"</span>
+        <span class="yk">MEMORY</span>: <span class="str">"{{ ansible_memtotal_mb }}"</span>
+        <span class="yk">BIOS</span>: <span class="str">"{{ ansible_bios_version }}"</span>
+        <span class="yk">CPU</span>: <span class="str">"{{ ansible_processor }}"</span>
+        <span class="yk">DISK_SIZE_SDA</span>: <span class="str">"{{ ansible_devices['sda']['size'] }}"</span>
+    - <span class="yk">name</span>: Collect report 2
+      <span class="yk">ansible.builtin.set_fact</span>:
+        <span class="yk">DISK_SIZE_SDB</span>: <span class="str">"{{ ansible_devices['sdb']['size'] }}"</span>
+    - <span class="yk">name</span>: Copy the content to the managed node
+      <span class="yk">ansible.builtin.copy</span>:
+        <span class="yk">content</span>: |
+          #hwreport
+          HOSTNAME={{ HOSTNAME | default('NONE') }}
+          MEMORY={{ MEMORY | default('NONE') }}
+          BIOS={{ BIOS | default('NONE') }}
+          CPU={{ CPU | default('NONE') }}
+          DISK_SIZE_SDA={{ DISK_SIZE_SDA | default('NONE') }}
+          DISK_SIZE_SDB={{ DISK_SIZE_SDB | default('NONE') }}
+        <span class="yk">dest</span>: /root/hwreport.txt</pre></div>
+      </div>
+      <div class="verify">Run &amp; Verify:</div>
+      <div class="code"><div class="bar"><span class="fn">run</span><button class="copy" onclick="cp(this)">Copy</button></div><pre><span class="cmd">ansible-navigator</span> run hwreport.yml -m stdout   <span class="cmt"># or: ansible-playbook hwreport.yml</span>
+<span class="cmd">ansible</span> all -m command -a <span class="str">'cat /root/hwreport.txt'</span></pre></div>
+      <div class="gitbox"><div class="lbl">🔺 Commit &amp; push to git</div>
+        <div class="code"><div class="bar"><span class="fn">git</span><button class="copy" onclick="cp(this)">Copy</button></div><pre><span class="cmd">git</span> add hwreport.yml
+<span class="cmd">git</span> commit -m <span class="str">"Q10: hwreport.yml"</span>
+<span class="cmd">git</span> push</pre></div></div>
+    </div>
+  </article>
+
+  <!-- Q11 -->
+  <article id="q11" class="q">
+    <div class="q-head" onclick="tg(this)">
+      <div class="qn">11</div>
+      <div class="qt"><h3>Replace /etc/issue — issue.yml</h3><div class="sub">per-group content with when</div></div>
+      <div class="chev">▸</div>
+    </div>
+    <div class="q-body">
+      <div class="lab task">Task</div>
+      <div class="task">
+        <div class="lead">Replace the file <code class="inline">/etc/issue</code> on all managed nodes. Playbook name <code class="inline">issue.yml</code>.</div>
+        <ol class="steps">
+          <li>In the <b>dev</b> group, <code class="inline">/etc/issue</code> should have the content <code class="inline">Development</code>.</li>
+          <li>In the <b>test</b> group, <code class="inline">/etc/issue</code> should have the content <code class="inline">Test</code>.</li>
+          <li>In the <b>prod</b> group, <code class="inline">/etc/issue</code> should have the content <code class="inline">Production</code>.</li>
+          <li>Run in all managed nodes.</li>
+        </ol>
+      </div>
+      <div class="lab ans">Answer</div>
+      <div class="answer"><span class="abadge">✓ Solution</span>
+        <div class="code"><div class="bar"><span class="fn">/home/student/ansible/issue.yml</span><button class="copy" onclick="cp(this)">Copy</button></div><pre><span class="cmt">---</span>
+- <span class="yk">name</span>: play for replace module
+  <span class="yk">hosts</span>: all
+  <span class="yk">tasks</span>:
+    - <span class="yk">name</span>: replace the content in dev group
+      <span class="yk">ansible.builtin.copy</span>:
+        <span class="yk">content</span>: Development
+        <span class="yk">dest</span>: /etc/issue
+      <span class="yk">when</span>: inventory_hostname in groups['dev']
+    - <span class="yk">name</span>: replace the content in test group
+      <span class="yk">ansible.builtin.copy</span>:
+        <span class="yk">content</span>: Test
+        <span class="yk">dest</span>: /etc/issue
+      <span class="yk">when</span>: inventory_hostname in groups['test']
+    - <span class="yk">name</span>: replace the content in prod group
+      <span class="yk">ansible.builtin.copy</span>:
+        <span class="yk">content</span>: Production
+        <span class="yk">dest</span>: /etc/issue
+      <span class="yk">when</span>: inventory_hostname in groups['prod']</pre></div>
+      </div>
+      <div class="verify">Run &amp; Verify:</div>
+      <div class="code"><div class="bar"><span class="fn">run</span><button class="copy" onclick="cp(this)">Copy</button></div><pre><span class="cmd">ansible-navigator</span> run issue.yml --diff -m stdout   <span class="cmt"># or: ansible-playbook issue.yml --diff</span>
+<span class="cmd">ansible</span> all -m command -a <span class="str">'cat /etc/issue'</span></pre></div>
+      <div class="gitbox"><div class="lbl">🔺 Commit &amp; push to git</div>
+        <div class="code"><div class="bar"><span class="fn">git</span><button class="copy" onclick="cp(this)">Copy</button></div><pre><span class="cmd">git</span> add issue.yml
+<span class="cmd">git</span> commit -m <span class="str">"Q11: issue.yml"</span>
+<span class="cmd">git</span> push</pre></div></div>
+    </div>
+  </article>
+
+  <!-- Q12 -->
+  <article id="q12" class="q">
+    <div class="q-head" onclick="tg(this)">
+      <div class="qn">12</div>
+      <div class="qt"><h3>Generate /etc/myhosts — hosts.yml</h3><div class="sub">Jinja2 template of all nodes</div></div>
+      <div class="chev">▸</div>
+    </div>
+    <div class="q-body">
+      <div class="lab task">Task</div>
+      <div class="task">
+        <div class="lead">Download <code class="inline">http://localhost/Rhce/myhosts.j2</code>. Playbook name <code class="inline">hosts.yml</code>, run in the <b>dev</b> group.</div>
+        <ol class="steps">
+          <li>The base <code class="inline">myhosts.j2</code> contains:
+            <ul>
+              <li><code class="inline">127.0.0.1 localhost.localdomain localhost</code></li>
+              <li><code class="inline">192.168.0.1 localhost.localdomain localhost</code></li>
+            </ul>
+          </li>
+          <li><code class="inline">myhosts.j2</code> should collect all node information (ipaddress, fqdn, hostname) similar to the <code class="inline">/etc/hosts</code> file.</li>
+          <li>When the playbook runs, it must store the information in <code class="inline">/etc/myhosts</code>. Final content example:
+            <ul>
+              <li><code class="inline">172.25.250.10 servera.lab.example.com servera</code></li>
+              <li><code class="inline">172.25.250.11 serverb.lab.example.com serverb</code></li>
+              <li><code class="inline">172.25.250.12 serverc.lab.example.com serverc</code></li>
+              <li><code class="inline">172.25.250.13 serverd.lab.example.com serverd</code></li>
+            </ul>
+          </li>
+        </ol>
+      </div>
+      <div class="lab ans">Answer</div>
+      <div class="answer"><span class="abadge">✓ Solution</span>
+        <div class="code"><div class="bar"><span class="fn">get template</span><button class="copy" onclick="cp(this)">Copy</button></div><pre><span class="cmd">wget</span> http://localhost/Rhce/myhosts.j2</pre></div>
+        <div class="code"><div class="bar"><span class="fn">myhosts.j2 (append at end)</span><button class="copy" onclick="cp(this)">Copy</button></div><pre>{% for host in groups['all'] %}
+{{hostvars[host]['ansible_facts']['default_ipv4']['address']}} {{hostvars[host]['ansible_facts']['fqdn']}} {{hostvars[host]['ansible_facts']['hostname']}}
+{% endfor %}</pre></div>
+        <div class="code"><div class="bar"><span class="fn">/home/student/ansible/hosts.yml</span><button class="copy" onclick="cp(this)">Copy</button></div><pre><span class="cmt">---</span>
+- <span class="yk">name</span>: Collect the all node information
+  <span class="yk">hosts</span>: all
+  <span class="yk">tasks</span>:
+    - <span class="yk">name</span>: copy the template to the managed node
+      <span class="yk">ansible.builtin.template</span>:
+        <span class="yk">src</span>: myhosts.j2
+        <span class="yk">dest</span>: /etc/myhosts
+      <span class="yk">when</span>: inventory_hostname in groups['dev']</pre></div>
+      </div>
+      <div class="verify">Run &amp; Verify:</div>
+      <div class="code"><div class="bar"><span class="fn">run</span><button class="copy" onclick="cp(this)">Copy</button></div><pre><span class="cmd">ansible-navigator</span> run hosts.yml -m stdout   <span class="cmt"># or: ansible-playbook hosts.yml</span>
+<span class="cmd">ansible</span> dev -m command -a <span class="str">'cat /etc/myhosts'</span></pre></div>
+      <div class="gitbox"><div class="lbl">🔺 Commit &amp; push to git</div>
+        <div class="code"><div class="bar"><span class="fn">git</span><button class="copy" onclick="cp(this)">Copy</button></div><pre><span class="cmd">git</span> add myhosts.j2
+<span class="cmd">git</span> commit -m <span class="str">"Q12: hosts.yml + myhosts.j2"</span>
+<span class="cmd">git</span> push</pre></div></div>
+    </div>
+  </article>
+
+  <!-- Q13 -->
+  <article id="q13" class="q">
+    <div class="q-head" onclick="tg(this)">
+      <div class="qn">13</div>
+      <div class="qt"><h3>Ansible Vault — vault.yml</h3><div class="sub">encrypted variables + secret.txt</div></div>
+      <div class="chev">▸</div>
+    </div>
+    <div class="q-body">
+      <div class="lab task">Task</div>
+      <div class="task">
+        <div class="lead">Create a variable file <code class="inline">vault.yml</code> that contains variables and their values.</div>
+        <ol class="steps">
+          <li><code class="inline">pw_developer</code> has the value <code class="inline">lamdev</code>.</li>
+          <li><code class="inline">pw_manager</code> has the value <code class="inline">lammgr</code>.</li>
+          <li>The <code class="inline">vault.yml</code> file should be encrypted using the password <b>P@sswOrd</b>.</li>
+          <li>Store the password in <code class="inline">secret.txt</code>, which is used to encrypt the variable file.</li>
+        </ol>
+      </div>
+      <div class="lab ans">Answer</div>
+      <div class="answer"><span class="abadge">✓ Solution</span>
+        <div class="code"><div class="bar"><span class="fn">create vault</span><button class="copy" onclick="cp(this)">Copy</button></div><pre><span class="cmd">vim</span> secret.txt
+P@sswOrd
+
+<span class="cmd">ansible-vault</span> create vault.yml --vault-password-file=secret.txt
+<span class="cmt"># inside the editor:</span>
+pw_developer: lamdev
+pw_manager: lammgr</pre></div>
+      </div>
+      <div class="verify">Verify:</div>
+      <div class="code"><div class="bar"><span class="fn">verify</span><button class="copy" onclick="cp(this)">Copy</button></div><pre><span class="cmd">ansible-vault</span> view vault.yml --vault-password-file=secret.txt</pre></div>
+      <div class="gitbox"><div class="lbl">🔺 Commit &amp; push to git</div>
+        <div class="code"><div class="bar"><span class="fn">git</span><button class="copy" onclick="cp(this)">Copy</button></div><pre><span class="cmd">git</span> add secret.txt vault.yml
+<span class="cmd">git</span> commit -m <span class="str">"Q13: vault.yml + secret.txt"</span>
+<span class="cmd">git</span> push</pre></div></div>
+    </div>
+  </article>
+
+  <!-- Q14 -->
+  <article id="q14" class="q">
+    <div class="q-head" onclick="tg(this)">
+      <div class="qn">14</div>
+      <div class="qt"><h3>Create users &amp; groups — users.yml</h3><div class="sub">vault + user_list.yml, SHA512</div></div>
+      <div class="chev">▸</div>
+    </div>
+    <div class="q-body">
+      <div class="lab task">Task</div>
+      <div class="task">
+        <div class="lead">Download <code class="inline">http://localhost/Rhce/user_list.yml</code>. Playbook name <code class="inline">users.yml</code>, run on all nodes using two variable files <code class="inline">user_list.yml</code> and <code class="inline">vault.yml</code>.</div>
+        <ol class="steps">
+          <li>Developers:
+            <ul>
+              <li>Create a group <b>opsdev</b>.</li>
+              <li>Create users from the <code class="inline">users</code> variable whose job = <b>developer</b>, and add them to the <b>opsdev</b> group.</li>
+              <li>Assign the password in SHA512 format; the user password is <code class="inline">{{ pw_developer }}</code>.</li>
+              <li>Run on the <b>dev</b> and <b>test</b> host groups.</li>
+            </ul>
+          </li>
+          <li>Managers:
+            <ul>
+              <li>Create a group <b>opsmgr</b>.</li>
+              <li>Create users from the <code class="inline">users</code> variable whose job = <b>manager</b>, and add them to the <b>opsmgr</b> group.</li>
+              <li>Assign the password in SHA512 format; the user password is <code class="inline">{{ pw_manager }}</code>.</li>
+              <li>Run on the <b>test</b> host group.</li>
+            </ul>
+          </li>
+          <li>Use a <b>when</b> condition for each play.</li>
+        </ol>
+      </div>
+      <div class="lab ans">Answer</div>
+      <div class="answer"><span class="abadge">✓ Solution</span>
+        <div class="code"><div class="bar"><span class="fn">get variable file</span><button class="copy" onclick="cp(this)">Copy</button></div><pre><span class="cmd">wget</span> http://localhost/Rhce/user_list.yml</pre></div>
+        <div class="code"><div class="bar"><span class="fn">/home/student/ansible/users.yml</span><button class="copy" onclick="cp(this)">Copy</button></div><pre><span class="cmt">---</span>
+- <span class="yk">name</span>: Create an users and groups
+  <span class="yk">hosts</span>: all
+  <span class="yk">vars_files</span>:
+    - user_list.yml
+    - vault.yml
+  <span class="yk">tasks</span>:
+    - <span class="yk">name</span>: Create group 1
+      <span class="yk">ansible.builtin.group</span>:
+        <span class="yk">name</span>: opsdev
+        <span class="yk">state</span>: present
+      <span class="yk">when</span>: inventory_hostname in groups['dev'] or inventory_hostname in groups['test']
+
+    - <span class="yk">name</span>: Create group 2
+      <span class="yk">ansible.builtin.group</span>:
+        <span class="yk">name</span>: opsmgr
+        <span class="yk">state</span>: present
+      <span class="yk">when</span>: inventory_hostname in groups['test']
+
+    - <span class="yk">name</span>: User create 1
+      <span class="yk">ansible.builtin.user</span>:
+        <span class="yk">name</span>: <span class="str">"{{ item.name }}"</span>
+        <span class="yk">uid</span>: <span class="str">"{{ item.uid }}"</span>
+        <span class="yk">password</span>: <span class="str">"{{ pw_developer | password_hash('sha512') }}"</span>
+        <span class="yk">password_expire_max</span>: <span class="str">"{{ item.password_expire_days }}"</span>
+        <span class="yk">groups</span>: opsdev
+        <span class="yk">state</span>: present
+      <span class="yk">loop</span>: <span class="str">"{{ users }}"</span>
+      <span class="yk">when</span>: item.job == "developer" and (inventory_hostname in groups['dev'] or inventory_hostname in groups['test'])
+
+    - <span class="yk">name</span>: user create 2
+      <span class="yk">ansible.builtin.user</span>:
+        <span class="yk">name</span>: <span class="str">"{{ item.name }}"</span>
+        <span class="yk">uid</span>: <span class="str">"{{ item.uid }}"</span>
+        <span class="yk">password</span>: <span class="str">"{{ pw_manager | password_hash('sha512') }}"</span>
+        <span class="yk">password_expire_max</span>: <span class="str">"{{ item.password_expire_days }}"</span>
+        <span class="yk">groups</span>: opsmgr
+        <span class="yk">state</span>: present
+      <span class="yk">loop</span>: <span class="str">"{{ users }}"</span>
+      <span class="yk">when</span>: item.job == "manager" and inventory_hostname in groups['test']</pre></div>
+      </div>
+      <div class="verify">Run &amp; Verify:</div>
+      <div class="code"><div class="bar"><span class="fn">run</span><button class="copy" onclick="cp(this)">Copy</button></div><pre><span class="cmd">ansible-navigator</span> run users.yml --vault-password-file=secret.txt -m stdout
+<span class="cmt"># fallback: ansible-playbook users.yml --vault-password-file=secret.txt</span>
+<span class="cmd">ansible</span> dev  -m command -a <span class="str">'tail /etc/group'</span>
+<span class="cmd">ansible</span> test -m command -a <span class="str">'tail /etc/group'</span></pre></div>
+      <div class="gitbox"><div class="lbl">🔺 Commit &amp; push to git</div>
+        <div class="code"><div class="bar"><span class="fn">git</span><button class="copy" onclick="cp(this)">Copy</button></div><pre><span class="cmd">git</span> add users.yml
+<span class="cmd">git</span> commit -m <span class="str">"Q14: users.yml + user_list.yml"</span>
+<span class="cmd">git</span> push</pre></div></div>
+    </div>
+  </article>
+
+  <!-- Q15 -->
+  <article id="q15" class="q">
+    <div class="q-head" onclick="tg(this)">
+      <div class="qn">15</div>
+      <div class="qt"><h3>Rekey a vault file — solaris.yml</h3><div class="sub">old cisco → new redhat</div></div>
+      <div class="chev">▸</div>
+    </div>
+    <div class="q-body">
+      <div class="lab task">Task</div>
+      <div class="task">
+        <div class="lead">Rekey the variable file from <code class="inline">http://localhost/Rhce/solaris.yml</code>.</div>
+        <ol class="steps">
+          <li>Old password: <b>cisco</b></li>
+          <li>New password: <b>redhat</b></li>
+        </ol>
+      </div>
+      <div class="lab ans">Answer</div>
+      <div class="answer"><span class="abadge">✓ Solution</span>
+        <div class="code"><div class="bar"><span class="fn">rekey</span><button class="copy" onclick="cp(this)">Copy</button></div><pre><span class="cmd">wget</span> http://localhost/Rhce/solaris.yml
+<span class="cmd">ansible-vault</span> rekey solaris.yml
+<span class="cmt"># Old password: cisco</span>
+<span class="cmt"># New password: redhat</span>
+<span class="cmt"># Confirm new password: redhat</span></pre></div>
+      </div>
+      <div class="gitbox"><div class="lbl">🔺 Commit &amp; push to git</div>
+        <div class="code"><div class="bar"><span class="fn">git</span><button class="copy" onclick="cp(this)">Copy</button></div><pre><span class="cmd">git</span> add solaris.yml
+<span class="cmd">git</span> commit -m <span class="str">"Q15: rekeyed solaris.yml"</span>
+<span class="cmd">git</span> push</pre></div></div>
+    </div>
+  </article>
+
+  <!-- Q16 -->
+  <article id="q16" class="q">
+    <div class="q-head" onclick="tg(this)">
+      <div class="qn">16</div>
+      <div class="qt"><h3>Cron job — crontab.yml</h3><div class="sub">every 2 min for user student</div></div>
+      <div class="chev">▸</div>
+    </div>
+    <div class="q-body">
+      <div class="lab task">Task</div>
+      <div class="task">
+        <div class="lead">Create a cron job for user <b>student</b> on all nodes. Playbook name <code class="inline">crontab.yml</code>.</div>
+        <ol class="steps">
+          <li>Every 2 minutes the job will execute <code class="inline">logger "EX294 in progress"</code>.</li>
+        </ol>
+      </div>
+      <div class="lab ans">Answer</div>
+      <div class="answer"><span class="abadge">✓ Solution</span>
+        <div class="code"><div class="bar"><span class="fn">/home/student/ansible/crontab.yml</span><button class="copy" onclick="cp(this)">Copy</button></div><pre><span class="cmt">---</span>
+- <span class="yk">name</span>: Create a cronjob
+  <span class="yk">hosts</span>: all
+  <span class="yk">tasks</span>:
+    - <span class="yk">name</span>: Cronjob for logger
+      <span class="yk">ansible.builtin.cron</span>:
+        <span class="yk">name</span>: Create logger
+        <span class="yk">user</span>: student
+        <span class="yk">minute</span>: <span class="str">"*/2"</span>
+        <span class="yk">job</span>: <span class="str">logger "EX294 in progress"</span>
+        <span class="yk">state</span>: present</pre></div>
+      </div>
+      <div class="verify">Run &amp; Verify:</div>
+      <div class="code"><div class="bar"><span class="fn">run</span><button class="copy" onclick="cp(this)">Copy</button></div><pre><span class="cmd">ansible-navigator</span> run crontab.yml -m stdout   <span class="cmt"># or: ansible-playbook crontab.yml</span>
+<span class="cmd">ansible</span> all -m command -a <span class="str">"crontab -lu student"</span></pre></div>
+      <div class="gitbox"><div class="lbl">🔺 Commit &amp; push to git</div>
+        <div class="code"><div class="bar"><span class="fn">git</span><button class="copy" onclick="cp(this)">Copy</button></div><pre><span class="cmd">git</span> add crontab.yml
+<span class="cmd">git</span> commit -m <span class="str">"Q16: crontab.yml"</span>
+<span class="cmd">git</span> push</pre></div></div>
+    </div>
+  </article>
+
+  <!-- Q17 -->
+  <article id="q17" class="q">
+    <div class="q-head" onclick="tg(this)">
+      <div class="qn">17</div>
+      <div class="qt"><h3>Storage — lvm.yml &amp; partition.yml</h3><div class="sub">conditional LV and partitions</div></div>
+      <div class="chev">▸</div>
+    </div>
+    <div class="q-body">
+      <div class="lab task">Task 17.1 — lvm.yml</div>
+      <div class="task">
+        <div class="lead">Create a logical volume named <b>data</b> of 700M from the volume group <b>research</b>; if 700M cannot be created, then create at least 300M. Playbook name <code class="inline">lvm.yml</code>, run on all nodes.</div>
+        <ol class="steps">
+          <li>If the VG does not exist, debug the message <code class="inline">"vg not found"</code>.</li>
+          <li>If the 700M LV size is not created, debug the message <code class="inline">"Insufficient size of vg"</code>.</li>
+          <li>If the logical volume is created, assign the file system as <b>ext3</b>.</li>
+          <li>Do not perform any mounting for this LV.</li>
+        </ol>
+      </div>
+      <div class="answer"><span class="abadge">✓ Solution 17.1</span>
+        <div class="code"><div class="bar"><span class="fn">/home/student/ansible/lvm.yml</span><button class="copy" onclick="cp(this)">Copy</button></div><pre><span class="cmt">---</span>
+- <span class="yk">name</span>: Creating LVM storage
+  <span class="yk">hosts</span>: all
+  <span class="yk">ignore_errors</span>: yes
+  <span class="yk">tasks</span>:
+  - <span class="yk">name</span>: Check Volume group is present
+    <span class="yk">ansible.builtin.command</span>: vgdisplay research
+    <span class="yk">register</span>: vginfo
+  - <span class="yk">name</span>: Debug Message
+    <span class="yk">ansible.builtin.debug</span>:
+      <span class="yk">msg</span>: <span class="str">"vg not found"</span>
+    <span class="yk">when</span>: vginfo is failed
+  - <span class="yk">name</span>: Creating LV of size 700MB
+    <span class="yk">community.general.lvol</span>:
+      <span class="yk">vg</span>: research
+      <span class="yk">lv</span>: data
+      <span class="yk">size</span>: 700m
+      <span class="yk">state</span>: present
+    <span class="yk">when</span>: vginfo is success
+    <span class="yk">register</span>: lv1
+  - <span class="yk">name</span>: Debug Message
+    <span class="yk">ansible.builtin.debug</span>:
+      <span class="yk">msg</span>: <span class="str">"Insufficient size of vg"</span>
+    <span class="yk">when</span>: lv1 is failed
+  - <span class="yk">name</span>: Create LV of 300MB
+    <span class="yk">community.general.lvol</span>:
+      <span class="yk">vg</span>: research
+      <span class="yk">lv</span>: data
+      <span class="yk">size</span>: 300m
+      <span class="yk">state</span>: present
+    <span class="yk">when</span>: lv1 is failed
+  - <span class="yk">name</span>: Assign filesystem as ext3
+    <span class="yk">community.general.filesystem</span>:
+      <span class="yk">device</span>: /dev/research/data
+      <span class="yk">fstype</span>: ext3
+    <span class="yk">when</span>: vginfo is success</pre></div>
+        <div class="code"><div class="bar"><span class="fn">run &amp; verify</span><button class="copy" onclick="cp(this)">Copy</button></div><pre><span class="cmd">ansible-navigator</span> run lvm.yml -m stdout   <span class="cmt"># or: ansible-playbook lvm.yml</span>
+<span class="cmd">ansible</span> all -m command -a <span class="str">'lsblk -fp'</span></pre></div>
+      </div>
+
+      <div class="gitbox"><div class="lbl">🔺 Commit &amp; push to git — 17.1</div>
+        <div class="code"><div class="bar"><span class="fn">git</span><button class="copy" onclick="cp(this)">Copy</button></div><pre><span class="cmd">git</span> add lvm.yml
+<span class="cmd">git</span> commit -m <span class="str">"Q17.1: LVM storage playbook"</span>
+<span class="cmd">git</span> push</pre></div></div>
+
+      <div class="lab task">Task 17.2 — partition.yml</div>
+      <div class="task">
+        <div class="lead">Create a playbook named <code class="inline">partition.yml</code> and make a file system on the <b>balancers</b> group.</div>
+        <ol class="steps">
+          <li>Create a partition of size 1500MiB on <b>sdb</b> with number 1.</li>
+          <li>Format it with <b>ext4</b> and mount on <code class="inline">/newpart</code>.</li>
+          <li>Create a partition of size 1500MiB on <b>sdc</b> with number 1.</li>
+          <li>If 1500MiB cannot be created, print: <code class="inline">"disk doesn't have enough space to create partition"</code>.</li>
+          <li>At least an 800MiB partition should be created.</li>
+          <li>Format it with <b>ext4</b> and mount on <code class="inline">/newpart1</code>.</li>
+          <li>If disk <b>vdd</b> is not found, print: <code class="inline">"disk not found"</code>.</li>
+        </ol>
+      </div>
+      <div class="answer"><span class="abadge">✓ Solution 17.2</span>
+        <div class="code"><div class="bar"><span class="fn">/home/student/ansible/partition.yml</span><button class="copy" onclick="cp(this)">Copy</button></div><pre><span class="cmt">---</span>
+- <span class="yk">name</span>: create partition on two disk
+  <span class="yk">hosts</span>: balancers
+  <span class="yk">ignore_errors</span>: yes
+  <span class="yk">tasks</span>:
+    <span class="cmt">#### sdb disk ####</span>
+    - <span class="yk">name</span>: list and register the disk sdb
+      <span class="yk">community.general.parted</span>:
+        <span class="yk">device</span>: /dev/sdb
+        <span class="yk">state</span>: info
+      <span class="yk">register</span>: sdbinfo
+    - <span class="yk">name</span>: create partition on disk sdb with size 1500MiB
+      <span class="yk">community.general.parted</span>:
+        <span class="yk">device</span>: /dev/sdb
+        <span class="yk">state</span>: present
+        <span class="yk">number</span>: 1
+        <span class="yk">part_start</span>: 1MiB
+        <span class="yk">part_end</span>: 1500MiB
+      <span class="yk">when</span>: sdbinfo is success
+      <span class="yk">register</span>: sdb1
+    - <span class="yk">name</span>: format file system on sdb1 partition with ext4
+      <span class="yk">community.general.filesystem</span>:
+        <span class="yk">device</span>: /dev/sdb1
+        <span class="yk">fstype</span>: ext4
+        <span class="yk">force</span>: yes
+      <span class="yk">when</span>: sdb1 is success
+    - <span class="yk">name</span>: mount the sdb1 with ext4 on /newpart
+      <span class="yk">ansible.posix.mount</span>:
+        <span class="yk">src</span>: /dev/sdb1
+        <span class="yk">path</span>: /newpart
+        <span class="yk">fstype</span>: ext4
+        <span class="yk">state</span>: mounted
+      <span class="yk">when</span>: sdb1 is success
+
+    <span class="cmt">#### sdc disk ####</span>
+    - <span class="yk">name</span>: list and register the disk sdc
+      <span class="yk">community.general.parted</span>:
+        <span class="yk">device</span>: /dev/sdc
+        <span class="yk">state</span>: info
+      <span class="yk">register</span>: sdcinfo
+    - <span class="yk">name</span>: create partition on disk sdc with size 1500MiB
+      <span class="yk">community.general.parted</span>:
+        <span class="yk">device</span>: /dev/sdc
+        <span class="yk">state</span>: present
+        <span class="yk">number</span>: 1
+        <span class="yk">part_start</span>: 1MiB
+        <span class="yk">part_end</span>: 1500MiB
+      <span class="yk">when</span>: sdcinfo is success
+      <span class="yk">register</span>: sdc1
+    - <span class="yk">ansible.builtin.debug</span>:
+        <span class="yk">msg</span>: <span class="str">"disk doesn't have enough space to create partition"</span>
+      <span class="yk">when</span>: sdc1 is failed
+    - <span class="yk">name</span>: create partition on disk sdc with atleast 800MiB
+      <span class="yk">community.general.parted</span>:
+        <span class="yk">device</span>: /dev/sdc
+        <span class="yk">state</span>: present
+        <span class="yk">number</span>: 1
+        <span class="yk">part_end</span>: 800MiB
+      <span class="yk">when</span>: sdc1 is failed
+    - <span class="yk">name</span>: format file system on sdc1 partition with ext4
+      <span class="yk">community.general.filesystem</span>:
+        <span class="yk">device</span>: /dev/sdc1
+        <span class="yk">fstype</span>: ext4
+        <span class="yk">force</span>: yes
+      <span class="yk">when</span>: sdcinfo is success
+    - <span class="yk">name</span>: mount the sdc1 with ext4 on /newpart1
+      <span class="yk">ansible.posix.mount</span>:
+        <span class="yk">src</span>: /dev/sdc1
+        <span class="yk">path</span>: /newpart1
+        <span class="yk">fstype</span>: ext4
+        <span class="yk">state</span>: mounted
+      <span class="yk">when</span>: sdcinfo is success
+
+    <span class="cmt">#### vdd disk ####</span>
+    - <span class="yk">name</span>: list and register the disk vdd
+      <span class="yk">community.general.parted</span>:
+        <span class="yk">device</span>: /dev/vdd
+        <span class="yk">state</span>: info
+      <span class="yk">register</span>: vddinfo
+    - <span class="yk">ansible.builtin.debug</span>:
+        <span class="yk">msg</span>: <span class="str">"disk not found"</span>
+      <span class="yk">when</span>: vddinfo is failed</pre></div>
+        <div class="code"><div class="bar"><span class="fn">run &amp; verify</span><button class="copy" onclick="cp(this)">Copy</button></div><pre><span class="cmd">ansible-navigator</span> run partition.yml -m stdout   <span class="cmt"># or: ansible-playbook partition.yml</span>
+<span class="cmd">ansible</span> balancers -m command -a <span class="str">'lsblk'</span></pre></div>
+      </div>
+      <div class="gitbox"><div class="lbl">🔺 Commit &amp; push to git</div>
+        <div class="code"><div class="bar"><span class="fn">git</span><button class="copy" onclick="cp(this)">Copy</button></div><pre><span class="cmd">git</span> add partition.yml
+<span class="cmd">git</span> commit -m <span class="str">"Q17: lvm.yml and partition.yml"</span>
+<span class="cmd">git</span> push</pre></div></div>
+    </div>
+  </article>
+
+  <footer>
+    RHEL-10 RHCE (EX294) Training Guide · Prepared by <b>Vectra</b><br>
+    Remember: after every question — <b>git add . → git commit → git push</b>. No push = 0 marks.
+  </footer>
+</main>
+</div>
+
+<script>
+function tg(h){h.parentElement.classList.toggle('open');}
+function toggleAll(o){document.querySelectorAll('.q').forEach(q=>q.classList.toggle('open',o));}
+function cp(btn){
+  const pre=btn.closest('.code').querySelector('pre');
+  navigator.clipboard.writeText(pre.innerText).then(()=>{
+    const t=btn.textContent;btn.textContent='Copied!';btn.style.background='#16a34a';btn.style.color='#fff';
+    setTimeout(()=>{btn.textContent=t;btn.style.background='';btn.style.color='';},1300);
+  });
+}
+const links=[...document.querySelectorAll('.sidebar nav a')];
+const obs=new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting){
+  links.forEach(l=>l.classList.remove('active'));
+  const a=links.find(l=>l.getAttribute('href')==='#'+e.target.id);if(a)a.classList.add('active');}});},
+  {rootMargin:'-15% 0px -75% 0px'});
+document.querySelectorAll('article.q, section[id]').forEach(s=>obs.observe(s));
+</script>
+</body>
+</html>
